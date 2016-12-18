@@ -9,6 +9,6 @@ object KaratsubaMuliplication {
 
 class KaratsubaMuliplication {
   def cal(n1: Long, n2: Long): Long = {
-    
+    ???
   }
 }
