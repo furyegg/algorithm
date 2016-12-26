@@ -15,11 +15,13 @@ object QuickSort {
   def main(args: Array[String]): Unit = {
     val list = getNumbers()
     val res1 = QuickSort(list, pivot1)
-    println(res1._1)
+    println(res1._1.mkString(","))
     println(res1._2)
 //    val res2 = QuickSort(list, pivot2)
+//    println(res2._1.mkString(","))
 //    println(res2._2)
 //    val res3 = QuickSort(list, pivot3)
+//    println(res3._1.mkString(","))
 //    println(res3._2)
   }
   
@@ -40,33 +42,46 @@ object QuickSort {
     val m = (list(b), b)
     val e = (list(c), c)
     
-    val arr = Array(s, m, e)
-    val sorted: Array[(Int, Int)] = Sorting.stableSort(arr, (e1: (Int, Int), e2: (Int, Int)) => e1._1 < e2._1)
+    val sorted: Array[(Int, Int)] = Sorting.stableSort(Array(s, m, e), (e1: (Int, Int), e2: (Int, Int)) => e1._1 < e2._1)
     sorted(1)._2
   }
 }
 
 class QuickSort {
   def sort(list: Array[Int], comparison: Int, pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = {
-    sort(list, 0, list.length - 1, comparison, pivot)
+    sort(list, 0, list.length - 1, 0, pivot)
   }
   
   private def sort(list: Array[Int], start: Int, end: Int, comparison: Int, pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = {
     if (start >= end) {
-      (list, comparison)
+      (list, if (comparison < 0) 0 else comparison)
     } else if (end - start == 1) {
+      val res = list.mkString(",")
+      // println(s"start - end: $start - $end")
+      // println(s" ===> $res")
       compareAndSwap(list, start, end)
-      (list, 1 + comparison)
+      (list, 1)
     } else {
-      println(s"----------- start sort at => $start to $end")
+      // println(s"start - end: $start - $end")
+      // val res = list.mkString(",")
+      // println(s" ===> $res")
+
+//      println(s"----------- start sort at => $start to $end")
       val p = pivot(list, start, end)
       
       val partitionIndex = partition(list, start, end, p)
       
-      val left = sort(list, start, partitionIndex - 1, comparison, pivot)
-      val right = sort(list, partitionIndex + 1, end, comparison, pivot)
-      
-      (list, end - start - 1 + left._2 + right._2)
+      val left = sort(list, start, partitionIndex - 1, 0, pivot)
+      val right = sort(list, partitionIndex + 1, end, 0, pivot)
+
+      val currentComp = end - start
+      val leftComp = left._2
+      val rightComp = right._2
+      val totalComp = currentComp + leftComp + rightComp
+
+      // println(s"new comparison: $currentComp, $leftComp, $rightComp, $totalComp")
+
+      (list, totalComp)
     }
   }
   
@@ -75,26 +90,56 @@ class QuickSort {
     else if (p == end) partitionAtStart(list, start, end)
     else partitionAtMid(list, start, end)
   }
+
+  def partition2(list: Array[Int], start: Int, end: Int, p: Int): Int = {
+    val pValue = list(start)
+    var i = -1
+    var j = start
+    while (j <= end) {
+      if (j == p)
+        j += 1
+      else {
+        if (list(j) > pValue) {
+          if (i < 0) i = j - 1
+          j += 1
+        } else {
+          if (i > -1) {
+            i += 1
+            if (i == p) i += 1
+            swap(list, i, j)
+          }
+          j += 1
+        }
+      }
+    }
+    if (i > 0) {
+      compareAndSwap(list, start, i)
+      i
+    } else {
+      compareAndSwap(list, start, end)
+      p
+    }
+  }
   
   def partitionAtStart(list: Array[Int], start: Int, end: Int): Int = {
-    println(s"start partition at $start to $end")
+//    println(s"start partition at $start to $end")
     val p = list(start)
     var i = -1
     var j = start + 1
     while (j <= end) {
       if (list(j) > p) {
-        println(s"found bigger than pivot, i: $i, j: $j")
+//        println(s"found bigger than pivot, i: $i, j: $j")
         if (i < 0) i = j - 1
         j +=  1
-        println(s"after increase, i: $i, j: $j")
+//        println(s"after increase, i: $i, j: $j")
       } else {
-        println(s"found smaller than pivot, i: $i, j: $j")
+//        println(s"found smaller than pivot, i: $i, j: $j")
         if (i > -1) {
           i += 1
           swap(list, i, j)
         }
         j += 1
-        println(s"after increase, i: $i, j: $j")
+//        println(s"after increase, i: $i, j: $j")
       }
     }
     if (i > 0) {
