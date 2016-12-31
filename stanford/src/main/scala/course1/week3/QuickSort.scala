@@ -1,20 +1,13 @@
 package course1.week3
 
-import scala.io.Source
 import scala.util.Sorting
+import common.ResourceUtils._
 
 object QuickSort {
-  def apply(list: Array[Int], pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = new QuickSort().sort(list, 0, pivot)
-  
-  private def getNumbers(): Array[Int] =
-    (for {
-        line <- Source.fromFile("src/main/resources/QuickSort.txt").getLines()
-//        line <- Source.fromFile("src/main/resources/numbers-100.txt").getLines()
-      } yield line.toInt
-    ).toArray
+  def apply(list: Array[Int], pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = new QuickSort().sort(list, pivot)
   
   def main(args: Array[String]): Unit = {
-    val list = getNumbers()
+    val list = getNumbers("10.txt")
 //    val res1 = QuickSort(list, pivot1)
 //    println(res1._1.mkString(","))
 //    println(res1._2)
@@ -31,9 +24,9 @@ object QuickSort {
   def pivot2(list: Array[Int], start: Int, end: Int): Int = end
   
   def pivot3(list: Array[Int], start: Int, end: Int): Int = {
-    val len = list.length
+    val len = end - start
     val m = if (len % 2 == 0) len / 2 - 1 else len / 2
-    middle(list, start, m, end)
+    middle(list, start, start + m, end)
   }
   
   def middle(list: Array[Int], a: Int, b: Int, c: Int): Int = {
@@ -46,7 +39,7 @@ object QuickSort {
 }
 
 class QuickSort {
-  def sort(list: Array[Int], comparison: Int, pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = {
+  def sort(list: Array[Int], pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = {
     sort(list, 0, list.length - 1, pivot)
   }
   
@@ -63,11 +56,11 @@ class QuickSort {
 
       val p = pivot(list, start, end)
   
-//      println(s"--- start sort at => $start to $end")
-//      printList(list, start, end, p)
+      println(s"--- start sort at => $start to $end")
+      printList(list, start, end, p)
       val partitionIndex = partition(list, start, end, p)
-//      printList(list, start, end, partitionIndex)
-//      println
+      printList(list, start, end, partitionIndex)
+      println
       
       val left = sort(list, start, partitionIndex - 1, pivot)
       val right = sort(list, partitionIndex + 1, end, pivot)
@@ -166,7 +159,7 @@ class QuickSort {
         j += 1
       else {
         if (list(j) > pv) {
-          if (i < 0 && j < p) i = j
+          if (i < 0) i = j
         } else {
           if (i > -1) {
             swap(list, i, j)
@@ -181,8 +174,13 @@ class QuickSort {
       swap(list, p, start)
       start
     } else if (i > start) {
-      swap(list, p, i - 1)
-      i - 1
+      if (i > p) {
+        swap(list, p, i - 1)
+        i - 1
+      } else {
+        swap(list, p, i)
+        i
+      }
     } else {
       p
     }
