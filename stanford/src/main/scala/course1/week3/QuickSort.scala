@@ -7,16 +7,22 @@ object QuickSort {
   def apply(list: Array[Int], pivot: (Array[Int], Int, Int) => Int): (Array[Int], Int) = new QuickSort().sort(list, pivot)
   
   def main(args: Array[String]): Unit = {
-    val list = getNumbers("10.txt")
-//    val res1 = QuickSort(list, pivot1)
-//    println(res1._1.mkString(","))
-//    println(res1._2)
-    val res2 = QuickSort(list, pivot2)
+    val file = "course1/QuickSort.txt"
+    
+    val list1 = getNumbers(file)
+    val res1 = QuickSort(list1, pivot1)
+    println(res1._1.mkString(","))
+    println(res1._2)
+  
+    val list2 = getNumbers(file)
+    val res2 = QuickSort(list2, pivot2)
     println(res2._1.mkString(","))
     println(res2._2)
-//    val res3 = QuickSort(list, pivot3)
-//    println(res3._1.mkString(","))
-//    println(res3._2)
+  
+    val list3 = getNumbers(file)
+    val res3 = QuickSort(list3, pivot3)
+    println(res3._1.mkString(","))
+    println(res3._2)
   }
   
   def pivot1(list: Array[Int], start: Int, end: Int): Int = start
@@ -94,8 +100,8 @@ class QuickSort {
   
   def partition(list: Array[Int], start: Int, end: Int, p: Int): Int = {
     if (p == start) partitionAtStart(list, start, end)
-    else if (p == end) partitionAtEnd(list, start, end)
-    else partitionAtMid(list, start, end, p)
+    else if (p == end) partitionAtEnd2(list, start, end)
+    else partitionAtMid2(list, start, end, p)
   }
 
   def partitionAtStart(list: Array[Int], start: Int, end: Int): Int = {
@@ -122,6 +128,16 @@ class QuickSort {
     } else {
       start
     }
+  }
+  
+  def partitionAtEnd2(list: Array[Int], start: Int, end: Int): Int = {
+    swap(list, start, end)
+    partitionAtStart(list, start, end)
+  }
+  
+  def partitionAtMid2(list: Array[Int], start: Int, end: Int, p: Int): Int = {
+    swap(list, start, p)
+    partitionAtStart(list, start, end)
   }
   
   def partitionAtEnd(list: Array[Int], start: Int, end: Int): Int = {
@@ -198,38 +214,6 @@ class QuickSort {
     val sum = a + b
     list(i) = sum - a
     list(j) = sum - b
-  }
-  
-  def partition2(list: Array[Int], start: Int, end: Int, p: Int): Int = {
-    val pValue = list(start)
-    var i = -1
-    var j = start
-    while (j <= end) {
-      if (j == p)
-        j += 1
-      else {
-        if (list(j) > pValue) {
-          if (i < 0) i = j - 1
-          j += 1
-        } else {
-          if (i > -1) {
-            i += 1
-            if (i == p) i += 1
-            swap(list, i, j)
-          }
-          j += 1
-        }
-      }
-    }
-    if (i > 0) {
-      compareAndSwap(list, p, i)
-      i
-    } else if (list(start) > list(end)) {
-      swap(list, start, end)
-      end
-    } else {
-      p
-    }
   }
   
 }
