@@ -28,7 +28,7 @@ class KaratsubaMuliplication {
     
     if (s1.length < shreshold || s2.length < shreshold) n1 * n2
     else {
-      val (small, big) = if (n1 < n2) (s2, s1) else (s1, s2)
+      val (big, small) = if (s1.length < s2.length) (s2, s1) else (s1, s2)
       val m1 = CommonUtils.midIdx(big.length)
       val m2 = CommonUtils.midIdx(small.length)
       val (a, b) = split(big, m1)
