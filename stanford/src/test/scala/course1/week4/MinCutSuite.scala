@@ -17,6 +17,8 @@ class MinCutSuite extends FunSuite {
     
     val g0 = newGraph("course1/mincut0.txt")
     val g1 = newGraph("course1/mincut1.txt")
+    val g2 = newGraph("course1/mincut2.txt")
+    val g3 = newGraph("course1/mincut3.txt")
     
     val times = 1000
     def run(g: Graph, f: (Graph, Set[Edge]) => (Int, Set[Edge])) = {
@@ -61,6 +63,22 @@ class MinCutSuite extends FunSuite {
       val (count, edges) = run(g1, findMinCut)
       assert(count === 2)
       assert(edges.toString === Set((1,7), (4,5)).toString)
+    }
+  }
+  
+  test("find min cut for graph2") {
+    new GraphSets {
+      val (count, edges) = run(g2, findMinCut)
+      assert(count === 1, "edges: " + edges.toString)
+      assert(edges.toString === Set((4,5)).toString)
+    }
+  }
+  
+  test("find min cut for graph3") {
+    new GraphSets {
+      val (count, edges) = run(g3, findMinCut)
+      assert(count === 3)
+      println(edges.toString)
     }
   }
 }

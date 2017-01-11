@@ -1,6 +1,9 @@
 package common
 
 object CommonUtils {
+  
+  def midIdx(n: Int): Int = if (n % 2 == 0) n / 2 - 1 else n / 2
+  
   def removeAt[T](l: List[T], i: Int): List[T] = {
     l.take(i) ::: l.drop(i + 1)
   }
