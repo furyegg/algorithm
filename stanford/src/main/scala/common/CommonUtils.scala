@@ -2,6 +2,9 @@ package common
 
 object CommonUtils {
   
+  /**
+    * Get middle index of a number, if n is even number, return the left index of the middle, such as 1 of 4.
+    */
   def midIdx(n: Int): Int = if (n % 2 == 0) n / 2 - 1 else n / 2
   
   def removeAt[T](l: List[T], i: Int): List[T] = {

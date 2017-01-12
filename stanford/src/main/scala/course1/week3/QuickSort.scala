@@ -1,5 +1,7 @@
 package course1.week3
 
+import common.CommonUtils
+
 import scala.util.Sorting
 import common.ResourceUtils._
 
@@ -30,8 +32,8 @@ object QuickSort {
   def pivot2(list: Array[Int], start: Int, end: Int): Int = end
   
   def pivot3(list: Array[Int], start: Int, end: Int): Int = {
-    val len = end - start
-    val m = if (len % 2 == 0) len / 2 - 1 else len / 2
+    val len = end - start + 1
+    val m = CommonUtils.midIdx(len)
     middle(list, start, start + m, end)
   }
   
@@ -62,11 +64,11 @@ class QuickSort {
 
       val p = pivot(list, start, end)
   
-      println(s"--- start sort at => $start to $end")
-      printList(list, start, end, p)
+//      println(s"--- start sort at => $start to $end")
+//      printList(list, start, end, p)
       val partitionIndex = partition(list, start, end, p)
-      printList(list, start, end, partitionIndex)
-      println
+//      printList(list, start, end, partitionIndex)
+//      println
       
       val left = sort(list, start, partitionIndex - 1, pivot)
       val right = sort(list, partitionIndex + 1, end, pivot)

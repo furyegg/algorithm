@@ -105,14 +105,6 @@ class QuickSortSuite extends FunSuite {
     assert(res3._2 === 518)
   }
   
-  test("test6-1") {
-    val list = Array(3, 9, 8, 4, 6, 10, 2, 5, 7, 1)
-    val res2 = QuickSort(list, pivot2)
-    println(res2._1.mkString(","))
-    println(res2._2)
-    // assert(res2._2 === 10184)
-  }
-  
   test("test7") {
     val file = "course1/1000.txt"
 //    val list = getNumbers(file)
@@ -120,14 +112,14 @@ class QuickSortSuite extends FunSuite {
 //    println(res1._1.mkString(","))
 //    assert(res1._2 === 10297)
     
-    val list2 = getNumbers(file)
-    val res2 = QuickSort(list2, pivot2)
-    println(res2._1.mkString(","))
-    assert(res2._2 === 10184)
+//    val list2 = getNumbers(file)
+//    val res2 = QuickSort(list2, pivot2)
+//    println(res2._1.mkString(","))
+//    assert(res2._2 === 10184)
 //
-//    val list3 = getNumbers(file)
-//    val res3 = QuickSort(list3, pivot3)
-//    println(res3._1.mkString(","))
-//    assert(res3._2 === 8921)
+    val list3 = getNumbers(file)
+    val res3 = QuickSort(list3, pivot3)
+    println(res3._1.mkString(","))
+    assert(res3._2 === 8921)
   }
 }
