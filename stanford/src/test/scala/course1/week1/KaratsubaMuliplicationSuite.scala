@@ -15,19 +15,19 @@ class KaratsubaMuliplicationSuite extends FunSuite {
   }
   
   test("test 16789 * 2") {
-    assert(16789111111111111L * 1234 === cal(16789111111111111L, 1234))
+    assert(6789 * 123 === cal(6789, 123))
   }
   
   test("test 5678 * 1234") {
     assert(5678 * 1234 === cal(5678, 1234))
   }
   
-  test("test 15678 * 12341") {
-    assert(15678 * 12341 === cal(15678, 12341))
-  }
-  
   test("test 15678 * 1234") {
     assert(15678 * 1234 === cal(15678, 1234))
+  }
+  
+  test("test 15678 * 12341") {
+    assert(15678 * 12341 === cal(15678, 12341))
   }
   
   test("test 12341234 * 56785678") {
@@ -42,7 +42,7 @@ class KaratsubaMuliplicationSuite extends FunSuite {
     val n1 = BigDecimal(567812L)
     val n2 = BigDecimal(1234L)
     val expected = n1 * n2
-    assert(expected === cal(n1, n2), expected.toString)
+    assert(expected === cal(n1, n2), "expected: " + expected.toString)
   }
   
   test("test 178962343243123 * 2983274987653") {

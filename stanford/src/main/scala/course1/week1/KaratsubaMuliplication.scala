@@ -15,19 +15,18 @@ object KaratsubaMuliplication {
 }
 
 /**
-  * 10^n * ac + 10^n/2 (ad + bc) + bd
+  * 10^n * ac + 10^n/2 * (ad + bc) + bd
   * ad + bc = (a+b)(c+d) - ac - bd
   */
 class KaratsubaMuliplication {
-  val shreshold = 4
+  val shreshold = 2
   
   def cal(n1: BigDecimal, n2: BigDecimal): BigDecimal = {
     val s1 = n1.toString
     val s2 = n2.toString
     println(s"\ncalc: $s1 * $s2")
     
-    if (s1.length < shreshold || s2.length < shreshold) n1 * n2
-    else {
+    if (s1.length > shreshold || s2.length > shreshold) {
       val (big, small) = if (s1.length < s2.length) (s2, s1) else (s1, s2)
       val m1 = CommonUtils.midIdx(big.length)
       val m2 = CommonUtils.midIdx(small.length)
@@ -38,13 +37,18 @@ class KaratsubaMuliplication {
       val bd = cal(b, d)
       val adbc = cal((a + b), (c + d)) - ac - bd
   
-      val pow2 = big.length / 2
+      val pow2 = b.toString.length
       val pow1 = pow2 * 2
       println(s"$a * $c * 10^$pow1 + $adbc * 10^$pow2 + $b * $d")
       ac * math.pow(10, pow1) + adbc * math.pow(10, pow2) + bd
-    }
+    } else
+      n1 * n2
   }
   
   private def split(s: String, m: Int): (BigDecimal, BigDecimal) =
-    if (m == 0) (0, BigDecimal(s)) else (BigDecimal(s.take(m + 1)), BigDecimal(s.drop(m + 1)))
+    if (m == 0)
+      (0, BigDecimal(s))
+    else
+      if (s.length < shreshold * 2) (BigDecimal(m), BigDecimal(s.drop(m)))
+      else (BigDecimal(s.take(m + 1)), BigDecimal(s.drop(m + 1)))
 }
