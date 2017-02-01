@@ -1,6 +1,8 @@
-val l = List(1,2,2,2,3,4,5,6,7,8,9,10)
-l.diff(List(2))
+val l1 = List(1,2,3)
+val l2 = List(11,2,3)
+val l3 = List(111,2,3)
+val list = List(l1,l2,l3)
+list.filter(l => l != l1 && l != l2)
 
-val s = "1234"
-s.take(1)
-s.drop(1)
+val set = Set()
+set.fol

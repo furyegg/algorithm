@@ -19,12 +19,19 @@ class Graph(var bags: List[Bag]) {
   
   lazy val allEdges: Set[Edge] = {
     def adj(bag: Bag): List[Vertex] = bag.tail
+    
+    def compareVertex(v1: Vertex, v2: Vertex): Boolean =
+      if (v1.length != v2.length)
+        if (v1.length < v2.length) true else false
+      else if (v1 < v2) true
+      else false
+        
     val all = for {
       bag <- bags
       v = bag.head
       adjvs = adj(bag)
       adjv <- adjvs
-      if (v < adjv)
+      if (compareVertex(v, adjv))
     } yield (v, adjv)
     all.toSet
   }
@@ -34,7 +41,8 @@ class Graph(var bags: List[Bag]) {
   def bag(i: Int) = bags(i)
   
   override def toString: String =
-    bags.map(l => l.mkString(","))
-      .mkString("; ")
+    bags
+      .map(b => b.mkString(","))
+      .mkString("\n")
         
 }

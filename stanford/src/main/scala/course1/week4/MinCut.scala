@@ -26,66 +26,53 @@ object MinCut {
     list.take(10).foreach(println)
   }
   
+  def getContractTimes(size: Int) = 2000
+  
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
       numbers <- numbersList
       bag = numbers.map(n => n.toString).toList
     } yield bag).toList
   
-  def getContractTimes(size: Int) = 2000
-  
   def findMinCut(g: Graph, edges: Set[Edge]): (Int, Set[Edge]) = {
     if (g.size == 2) (edges.size, edges)
     else {
       val (cg, ces) = contract(g, edges)
+      println(cg + "\n")
       findMinCut(cg, ces)
     }
   }
   
   def contract(g: Graph, edges: Set[Edge]): (Graph, Set[Edge]) = {
-    def randomPair = {
-      def random = Random.nextInt(g.size)
-      val first = random
-      def findSecond(first: Int): Int = {
-        val sec = random
-        if (sec != first) sec
-        else findSecond(first)
-      }
-      val second = findSecond(first)
-      if (first < second) (first, second)
-      else (second, first)
-    }
-    
-    val (i1, i2) = randomPair
-    // println(s"chosen: $i1, $i2")
-    contract(i1, i2, g, edges)
+    val allEdges = g.allEdges.toList
+    println("all edges: " + allEdges.length + ", " + allEdges.mkString(", "))
+    val random = Random.nextInt(allEdges.size)
+    val edge = allEdges(random)
+    println("contract edge: " + edge)
+    contract(edge, g, edges)
   }
   
-  def contract(i1: Int, i2: Int, g: Graph, edges: Set[Edge]): (Graph, Set[Edge]) = {
-    def removeVertices(i1: Int, i2: Int): (Bag, Bag, List[Bag]) = {
-      val bag1 = g.bag(i1)
-      val bag2 = g.bag(i2)
-      val rest1 = CommonUtils.removeAt(g.bags, i1)
-      val rest2 = CommonUtils.removeAt(rest1, i2 - 1)
-      (bag1, bag2, rest2)
+  def contract(edge: Edge, g: Graph, edges: Set[Edge]): (Graph, Set[Edge]) = {
+    def removeVertices(edge: Edge): (Bag, Bag, List[Bag]) = {
+      val bag1 = g.bags.filter(b => b.head == edge._1).head
+      val bag2 = g.bags.filter(b => b.head == edge._2).head
+      val rest = g.bags.filter(b => b != bag1 && b != bag2)
+      (bag1, bag2, rest)
     }
   
-    def updateByNewVertex(v: Vertex, bags: List[Bag]): List[Bag] = {
-      def removeVertex(vs: List[Vertex], bag: Bag): Bag =
-        vs match {
-          case Nil => bag
-          case x :: xs => removeVertex(xs, CommonUtils.remove(bag, x))
-        }
-    
-      val oldVertices = v.split(sep).toList
+    def updateRestBags(v1: Vertex, v2: Vertex, newV: Vertex, bags: List[Bag]): List[Bag] =
       for {
           bag <- bags
-          contractedBag = removeVertex(oldVertices, bag)
-          updatedBag = if (contractedBag.length != bag.length) contractedBag :+ v else bag
+          contractedBag = CommonUtils.remove(bag, v1, v2)
+          updatedBag = if (contractedBag.length != bag.length) contractedBag :+ newV else bag
       } yield updatedBag
-    }
   
-    def createNewBag(newVertex: String, restBags: List[Bag]): Bag = newVertex :: restBags.map(n => n.head)
+    def createNewBag(newVertex: String, bag1: Bag, bag2: Bag): Bag = {
+      var merged = bag1.union(bag2).toSet
+      merged -= bag1.head
+      merged -= bag2.head
+      newVertex :: merged.toList
+    }
   
     def removeEdges(v1: Vertex, v2: Vertex, edges: Set[Edge]): Set[Edge] = {
       val v1s = v1.split(sep)
@@ -99,12 +86,12 @@ object MinCut {
       es
     }
   
-    val (bag1, bag2, restBags) = removeVertices(i1, i2)
+    val (bag1, bag2, restBags) = removeVertices(edge)
     val v1 = bag1.head
     val v2 = bag2.head
-    val newVertex = s"$v1$sep$v2"
-    val newBag = createNewBag(newVertex, restBags)
-    val updatedBags = updateByNewVertex(newVertex, restBags)
+    val newVertex = String.format("%s%s%s", v1, sep, v2)
+    val newBag = createNewBag(newVertex, bag1, bag2)
+    val updatedBags = updateRestBags(v1, v2, newVertex, restBags)
     val restEdges = removeEdges(v1, v2, edges)
     (Graph(newBag :: updatedBags), restEdges)
   }

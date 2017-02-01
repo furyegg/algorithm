@@ -1,5 +1,7 @@
 package common
 
+import scala.util.Random
+
 object CommonUtils {
   
   /**
@@ -18,6 +20,26 @@ object CommonUtils {
   
   def remove[T](l: List[T], value: T): List[T] = {
     l.diff(List(value))
+  }
+  
+  def remove[T](l: List[T], values: T*): List[T] = {
+    l.diff(values.toList)
+  }
+  
+  def randomPair(size: Int): (Int, Int) = {
+    def randomPair = {
+      def random = Random.nextInt(size)
+      val first = random
+      def findSecond(first: Int): Int = {
+        val sec = random
+        if (sec != first) sec
+        else findSecond(first)
+      }
+      val second = findSecond(first)
+      if (first < second) (first, second)
+      else (second, first)
+    }
+    randomPair
   }
 
 }
