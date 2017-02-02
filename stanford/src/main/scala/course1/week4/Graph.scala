@@ -10,6 +10,22 @@ object Graph {
   type Edge = (Vertex, Vertex)
   
   val sep = "-"
+  
+  def compareVertex(v1: Vertex, v2: Vertex): Boolean = {
+    if (v1.contains(sep) || v2.contains(sep)) {
+      val v1Sum = v1.split(sep).map(v => v.toInt).sum
+      val v2Sum = v2.split(sep).map(v => v.toInt).sum
+      v1Sum < v2Sum
+    } else
+      if (v1.length != v2.length) v1.length < v2.length
+      else v1 < v2
+  }
+  
+  def combineVertex(v1: Vertex, v2: Vertex): Vertex = {
+    val v1s = v1.split(sep).map(v => v.toInt)
+    val v2s = v2.split(sep).map(v => v.toInt)
+    v1s.union(v2s).sorted.map(v => v.toString).mkString(sep)
+  }
 }
 
 class Graph(var bags: List[Bag]) {
@@ -20,12 +36,6 @@ class Graph(var bags: List[Bag]) {
   lazy val allEdges: Set[Edge] = {
     def adj(bag: Bag): List[Vertex] = bag.tail
     
-    def compareVertex(v1: Vertex, v2: Vertex): Boolean =
-      if (v1.length != v2.length)
-        if (v1.length < v2.length) true else false
-      else if (v1 < v2) true
-      else false
-        
     val all = for {
       bag <- bags
       v = bag.head

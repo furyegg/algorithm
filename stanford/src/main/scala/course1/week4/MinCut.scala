@@ -26,7 +26,7 @@ object MinCut {
     list.take(10).foreach(println)
   }
   
-  def getContractTimes(size: Int) = 2000
+  def getContractTimes(size: Int) = 5000
   
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
@@ -38,17 +38,17 @@ object MinCut {
     if (g.size == 2) (edges.size, edges)
     else {
       val (cg, ces) = contract(g, edges)
-      println(cg + "\n")
+      // println(cg + "\n")
       findMinCut(cg, ces)
     }
   }
   
   def contract(g: Graph, edges: Set[Edge]): (Graph, Set[Edge]) = {
     val allEdges = g.allEdges.toList
-    println("all edges: " + allEdges.length + ", " + allEdges.mkString(", "))
+    // println("all edges: " + allEdges.length + ", " + allEdges.mkString(", "))
     val random = Random.nextInt(allEdges.size)
     val edge = allEdges(random)
-    println("contract edge: " + edge)
+    // println("contract edge: " + edge)
     contract(edge, g, edges)
   }
   
@@ -81,7 +81,7 @@ object MinCut {
       for {
         v1 <- v1s
         v2 <- v2s
-        edge = if (v1 < v2) (v1, v2) else (v2, v1)
+        edge = if (Graph.compareVertex(v1, v2)) (v1, v2) else (v2, v1)
       } es -= edge
       es
     }
@@ -89,10 +89,11 @@ object MinCut {
     val (bag1, bag2, restBags) = removeVertices(edge)
     val v1 = bag1.head
     val v2 = bag2.head
-    val newVertex = String.format("%s%s%s", v1, sep, v2)
+    val newVertex = Graph.combineVertex(v1, v2)
     val newBag = createNewBag(newVertex, bag1, bag2)
     val updatedBags = updateRestBags(v1, v2, newVertex, restBags)
     val restEdges = removeEdges(v1, v2, edges)
+    // println("after remove edges: " + restEdges)
     (Graph(newBag :: updatedBags), restEdges)
   }
 }
