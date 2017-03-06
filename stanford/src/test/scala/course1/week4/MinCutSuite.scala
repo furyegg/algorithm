@@ -91,7 +91,7 @@ class MinCutSuite extends FunSuite {
       val (count, edges) = run(g4, findMinCut)
       // assert(count === 1, "edges: " + edges.toString)
       println(count)
-      println(edges.toString)
+      println(edges.toString) // Set((30,37), (11,26), (9,17))
     }
   }
   

@@ -18,10 +18,6 @@ object CommonUtils {
     removeAt(rest1, i2 - 1)
   }
   
-  def remove[T](l: List[T], value: T): List[T] = {
-    l.diff(List(value))
-  }
-  
   def remove[T](l: List[T], values: T*): List[T] = {
     l.diff(values.toList)
   }

@@ -68,9 +68,7 @@ object MinCut {
       } yield updatedBag
   
     def createNewBag(newVertex: String, bag1: Bag, bag2: Bag): Bag = {
-      var merged = bag1.union(bag2).toSet
-      merged -= bag1.head
-      merged -= bag2.head
+      val merged = bag1.tail.union(bag2.tail).toSet
       newVertex :: merged.toList
     }
   

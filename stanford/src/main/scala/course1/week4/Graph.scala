@@ -13,9 +13,14 @@ object Graph {
   
   def compareVertex(v1: Vertex, v2: Vertex): Boolean = {
     if (v1.contains(sep) || v2.contains(sep)) {
-      val v1Sum = v1.split(sep).map(v => v.toInt).sum
-      val v2Sum = v2.split(sep).map(v => v.toInt).sum
-      v1Sum < v2Sum
+      val v1Vertices = v1.split(sep)
+      val v2Vertices = v2.split(sep)
+      val v1Sum = v1Vertices.map(v => v.toInt).sum
+      val v2Sum = v2Vertices.map(v => v.toInt).sum
+      
+      if (v1Sum == v2Sum) v1Vertices.head < v2Vertices.head
+      else v1Sum < v2Sum
+      
     } else
       if (v1.length != v2.length) v1.length < v2.length
       else v1 < v2
