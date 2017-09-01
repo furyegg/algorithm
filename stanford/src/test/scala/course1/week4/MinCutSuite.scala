@@ -22,14 +22,14 @@ class MinCutSuite extends FunSuite {
     val g3 = newGraph("course1/mincut3.txt")
     val g4 = newGraph("course1/mincut4.txt")
     
-    val times = 500
+    val times = 200
     def run(g: Graph, f: (Graph, Set[Edge]) => (Int, Set[Edge])) = {
       var i = 0
       var min = Int.MaxValue
       var res: (Int, Set[Edge]) = null
       // println("Graph:\n" + g)
       while (i < times) {
-        // println("==================================================================")
+        println("==================================================================")
         val (count, edges) = f(g, g.allEdges)
         if (count < min) {
           min = count
