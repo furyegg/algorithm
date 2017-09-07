@@ -5,14 +5,14 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import MinCut._
-import Graph._
+import MinCutGraph._
 
 @RunWith(classOf[JUnitRunner])
 class MinCutSuite extends FunSuite {
   trait GraphSets {
     def newGraph(file: String) = {
       val list = TestResourceUtils.getNumbersList(file)
-      Graph(buildBags(list))
+      MinCutGraph(buildBags(list))
     }
     
     val g0 = newGraph("course1/mincut0.txt")
@@ -23,7 +23,7 @@ class MinCutSuite extends FunSuite {
     val g4 = newGraph("course1/mincut4.txt")
     
     val times = 200
-    def run(g: Graph, f: (Graph, Set[Edge]) => (Int, Set[Edge])) = {
+    def run(g: MinCutGraph, f: (MinCutGraph, Set[Edge]) => (Int, Set[Edge])) = {
       var i = 0
       var min = Int.MaxValue
       var res: (Int, Set[Edge]) = null

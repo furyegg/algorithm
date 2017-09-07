@@ -1,7 +1,7 @@
 package course1.week4
 
 import common.{CommonUtils, ResourceUtils}
-import Graph._
+import MinCutGraph._
 
 import scala.util.{Random, Sorting}
 
@@ -11,7 +11,7 @@ object MinCut {
     val numbersList = ResourceUtils.getNumbersList("course1/kargerMinCut.txt")
     val bags = buildBags(numbersList)
     
-    val g = Graph(bags)
+    val g = MinCutGraph(bags)
     val times = getContractTimes(g.size)
  
     val res = (for (i <- (0 until times).par) yield {
@@ -25,15 +25,15 @@ object MinCut {
     list.take(10).foreach(println)
   }
   
-  def getContractTimes(size: Int) = 1000
+  def getContractTimes(size: Int) = size * 5
   
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
       numbers <- numbersList
-      bag = numbers.map(n => n.toString).toList
+      bag = numbers.map(n => List(n)).toList
     } yield bag).toList
   
-  def findMinCut(g: Graph, edges: Set[Edge]): (Int, Set[Edge]) = {
+  def findMinCut(g: MinCutGraph, edges: Set[Edge]): (Int, Set[Edge]) = {
     if (g.size == 2) (edges.size, edges)
     else {
       val (cg, ces) = contract(g, edges)
@@ -42,7 +42,7 @@ object MinCut {
     }
   }
   
-  def contract(g: Graph, edges: Set[Edge]): (Graph, Set[Edge]) = {
+  def contract(g: MinCutGraph, edges: Set[Edge]): (MinCutGraph, Set[Edge]) = {
     val allEdges = g.allEdges.toList
 //    println("all edges: " + allEdges.length + ", " + allEdges.mkString(", "))
     val random = new Random().nextInt(allEdges.size)
@@ -51,7 +51,7 @@ object MinCut {
     contract(edge, g, edges)
   }
   
-  def contract(edge: Edge, g: Graph, edges: Set[Edge]): (Graph, Set[Edge]) = {
+  def contract(edge: Edge, g: MinCutGraph, edges: Set[Edge]): (MinCutGraph, Set[Edge]) = {
     def removeVertices(edge: Edge): (Bag, Bag, List[Bag]) = {
       val bag1 = g.bags.filter(b => b.head == edge._1).head
       val bag2 = g.bags.filter(b => b.head == edge._2).head
@@ -78,7 +78,7 @@ object MinCut {
       for {
         v1 <- v1s
         v2 <- v2s
-        edge = if (Graph.compareVertex(v1, v2)) (v1, v2) else (v2, v1)
+        edge = if (MinCutGraph.compareVertex(v1, v2)) (v1, v2) else (v2, v1)
       } es -= edge
       es
     }
@@ -86,11 +86,11 @@ object MinCut {
     val (bag1, bag2, restBags) = removeVertices(edge)
     val v1 = bag1.head
     val v2 = bag2.head
-    val newVertex = Graph.combineVertex(v1, v2)
+    val newVertex = MinCutGraph.combineVertex(v1, v2)
     val newBag = createNewBag(newVertex, bag1, bag2)
     val updatedBags = updateRestBags(v1, v2, newVertex, restBags)
     val restEdges = removeEdges(v1, v2, edges)
     // println("after remove edges: " + restEdges)
-    (Graph(newBag :: updatedBags), restEdges)
+    (MinCutGraph(newBag :: updatedBags), restEdges)
   }
 }
