@@ -13,11 +13,14 @@ object MinCut {
     
     val g = MinCutGraph(bags)
     val times = getContractTimes(g.size)
- 
-    val res = (for (i <- (0 until times).par) yield {
-      println(i)
-      findMinCut(g, g.allEdges)
-    }).toArray
+  
+    val res = (
+      for {
+        i <- (0 until times).par
+        (count, edges) = findMinCut(g, g.allEdges)
+        if (count < 30)
+      } yield (count, edges)
+      ).toArray
     
     Sorting.stableSort(res, (e1: (Int, Set[Edge]), e2: (Int, Set[Edge])) => e1._1 < e2._1)
     
@@ -25,7 +28,7 @@ object MinCut {
     list.take(10).foreach(println)
   }
   
-  def getContractTimes(size: Int) = size * 5
+  def getContractTimes(size: Int) = 1
   
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
@@ -66,19 +69,17 @@ object MinCut {
           updatedBag = if (contractedBag.length != bag.length) contractedBag :+ newV else bag
       } yield updatedBag).toList
   
-    def createNewBag(newVertex: String, bag1: Bag, bag2: Bag): Bag = {
+    def createNewBag(newVertex: Vertex, bag1: Bag, bag2: Bag): Bag = {
       val merged = bag1.tail.union(bag2.tail).toSet
       newVertex :: merged.toList
     }
   
     def removeEdges(v1: Vertex, v2: Vertex, edges: Set[Edge]): Set[Edge] = {
-      val v1s = v1.split(sep)
-      val v2s = v2.split(sep)
       var es = edges
       for {
-        v1 <- v1s
-        v2 <- v2s
-        edge = if (MinCutGraph.compareVertex(v1, v2)) (v1, v2) else (v2, v1)
+        n1 <- v1
+        n2 <- v2
+        edge = if (n1 < n2) (List(n1), List(n2)) else (List(n2), List(n1))
       } es -= edge
       es
     }

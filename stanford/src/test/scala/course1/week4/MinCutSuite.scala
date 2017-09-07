@@ -29,7 +29,7 @@ class MinCutSuite extends FunSuite {
       var res: (Int, Set[Edge]) = null
       // println("Graph:\n" + g)
       while (i < times) {
-        println("==================================================================")
+//        println("==================================================================")
         val (count, edges) = f(g, g.allEdges)
         if (count < min) {
           min = count
@@ -47,12 +47,12 @@ class MinCutSuite extends FunSuite {
     }
   }
   
-  test("contract with fixed vertices") {
-    new GraphSets {
-      val (g, edges) = contract(("1","2"), g0, g0.allEdges)
-      assert(g.toString === "1-2,3,4\n3,4,1-2\n4,3,1-2")
-    }
-  }
+//  test("contract with fixed vertices") {
+//    new GraphSets {
+//      val (g, edges) = contract(("1","2"), g0, g0.allEdges)
+//      assert(g.toString === "1-2,3,4\n3,4,1-2\n4,3,1-2")
+//    }
+//  }
   
   test("find min cut for graph0") {
     new GraphSets {

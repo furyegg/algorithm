@@ -31,7 +31,6 @@ class MinCutGraph(val bags: List[Bag]) {
   lazy val allEdges: Set[Edge] = {
     def adj(bag: Bag): List[Vertex] = bag.tail
   
-    val allEdges: TreeSet[(Vertex, Vertex)] = new TreeSet()
     val all = for {
       bag <- bags
       v = bag.head
@@ -39,7 +38,7 @@ class MinCutGraph(val bags: List[Bag]) {
       adjv <- adjvs
       if (compareVertex(v, adjv))
     } yield (v, adjv)
-    allEdges ++ all
+    all.toSet
   }
   
   def adj(v: Vertex): List[Vertex] = ???
