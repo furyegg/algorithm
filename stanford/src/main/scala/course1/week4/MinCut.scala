@@ -28,7 +28,7 @@ object MinCut {
     list.take(10).foreach(println)
   }
   
-  def getContractTimes(size: Int) = 1
+  def getContractTimes(size: Int) = 30000
   
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
