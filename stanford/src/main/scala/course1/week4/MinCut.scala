@@ -13,11 +13,14 @@ object MinCut {
     
     val g = MinCutGraph(bags)
     val times = getContractTimes(g.size)
- 
-    val res = (for (i <- (0 until times).par) yield {
-      println(i)
-      findMinCut(g, g.allEdges)
-    }).toArray
+
+    val res = (
+      for {
+        i <- (0 until times).par
+        (count, edges) = findMinCut(g, g.allEdges)
+        if (count < 30)
+      } yield (count, edges)
+      ).toArray
     
     Sorting.stableSort(res, (e1: (Int, Set[Edge]), e2: (Int, Set[Edge])) => e1._1 < e2._1)
     
@@ -25,7 +28,7 @@ object MinCut {
     list.take(10).foreach(println)
   }
   
-  def getContractTimes(size: Int) = size * 5
+  def getContractTimes(size: Int) = 10000
   
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
