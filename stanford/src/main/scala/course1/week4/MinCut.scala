@@ -6,7 +6,7 @@ import MinCutGraph._
 import scala.util.{Random, Sorting}
 
 object MinCut {
-  // 17, Set((141,178), (79,163), (171,184), (37,186), (24,53), (91,165), (123,156), (10,185), (149,161), (36,122), (80,134), (116,164), (86,109), (48,193), (27,169), (41,108), (58,188))
+  
   def main(args: Array[String]): Unit = {
     val numbersList = ResourceUtils.getNumbersList("course1/kargerMinCut.txt")
     val bags = buildBags(numbersList)
@@ -18,20 +18,17 @@ object MinCut {
       for {
         i <- (0 until times).par
         (count, edges) = findMinCut(g, g.allEdges)
-        if (count < 100)
+        if (count < 30)
       } yield (count, edges)
       ).toArray
     
     Sorting.stableSort(res, (e1: (Int, Set[Edge]), e2: (Int, Set[Edge])) => e1._1 < e2._1)
     
     val list = List.concat(res)
-    list.take(10).foreach( {case (count, edges) =>
-        print(s"$count, ")
-        println(edges.map(e => (e._1(0), e._2(0))))
-    })
+    list.take(10).foreach(println)
   }
   
-  def getContractTimes(size: Int) = 40000
+  def getContractTimes(size: Int) = 30000
   
   def buildBags(numbersList: Array[Array[Int]]): List[Bag] =
     (for {
