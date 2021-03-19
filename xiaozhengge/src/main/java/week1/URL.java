@@ -3,37 +3,27 @@ package week1;
 import java.util.Arrays;
 
 public class URL {
-    
     /**
      * 题目要求java要用字符数组来实现，而且假设数组长度是永远够用的
      */
     public String replaceSpaces(String S, int length) {
         char[] arr = S.toCharArray();
-        int m;
-        for (m = arr.length - 1; m >= 0 && arr[m] == ' '; --m) {}
-        
-        if (m < 0) {
-            char[] chars = new char[length * 3];
-            for (int i = 0; i < length * 3;) {
-                chars[i++] = '%';
-                chars[i++] = '2';
-                chars[i++] = '0';
-            }
-            return new String(chars);
-        }
-        
-        char[] chars = new char[m * 3];
+        char[] res = new char[length * 3];
+    
         int i = 0;
-        for (int n = 0; n <= m; ++n) {
+        int count = 0;
+        for (int n = 0; n < length; ++n) {
             char c = arr[n];
             if (c == ' ') {
-                chars[i++] = '%';
-                chars[i++] = '2';
-                chars[i++] = '0';
+                res[i++] = '%';
+                res[i++] = '2';
+                res[i++] = '0';
+                count += 3;
             } else {
-                chars[i++] = c;
+                res[i++] = c;
+                ++count;
             }
         }
-        return new String(Arrays.copyOfRange(chars, 0, i));
+        return new String(Arrays.copyOfRange(res, 0, count));
     }
 }
